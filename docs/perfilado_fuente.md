@@ -1,25 +1,15 @@
 # Perfilado de la fuente de datos y limitaciones
 
-**Proyecto:** SolarBI Orquestado  
-<<<<<<< HEAD
-**Fuente:** OpenCEM v1.0.0  
-**Base de datos original:** SQLite  
-**Archivo:** `data/bronze/opencem-v1.0.0.sqlite`  
-**Capa:** Bronze – Datos originales  
-**Estado:** Perfilado inicial completado  
+**Proyecto:** SolarBI Orquestado
+**Fuente:** OpenCEM v1.0.0 ([Zenodo](https://zenodo.org/records/21436223))
+**Base de datos original:** SQLite
+**Archivo:** `data/bronze/opencem-v1.0.0.sqlite`
+**Capa:** Bronze – Datos originales
+**Estado:** Perfilado inicial completado
 **Fecha de documentación:** 16 de noviembre de 2026
 
 ---
 
-=======
-**Fuente:** OpenCEM v1.0.0 (https://zenodo.org/records/21436223) 
-**Base de datos original:** SQLite  
-**Archivo:** `data/bronze/opencem-v1.0.0.sqlite`  
-**Capa:** Bronze
-**Estado:** Perfilado inicial 
-**Fecha de documentación:** 16 de noviembre de 2026
-
->>>>>>> 0a23a0d (docs: add source profiling and data quality documentation)
 ## 1. Objetivo
 
 Este documento presenta los resultados del análisis exploratorio y perfilado de la fuente de datos OpenCEM v1.0.0, utilizada como origen histórico para la solución de Business Intelligence SolarBI Orquestado.
@@ -36,11 +26,7 @@ Archivo original:
 
 `data/bronze/opencem-v1.0.0.sqlite`
 
-<<<<<<< HEAD
 El archivo se conserva en la capa Bronze como fuente histórica original, sin modificaciones.
-=======
-El archivo se conserva en la capa Bronze como fuente histórica original, sin alteraciones.
->>>>>>> 0a23a0d (docs: add source profiling and data quality documentation)
 
 ### 2.1 Integridad del archivo
 
@@ -58,12 +44,8 @@ El hash corresponde al archivo comprimido original descargado, no al archivo SQL
 
 Durante la inspección del esquema se identificaron las siguientes tablas:
 
-<<<<<<< HEAD
 | Tabla | Descripción funcional preliminar |
 |---|---|
-=======
-| Tabla | Descripción funcional preliminar |---|---|
->>>>>>> 0a23a0d (docs: add source profiling and data quality documentation)
 | `analog_measurements` | Mediciones eléctricas, batería, paneles fotovoltaicos, red y carga |
 | `context` | Eventos y registros contextuales en formato JSON |
 | `fault_history` | Historial de fallos y registros asociados |
@@ -162,11 +144,8 @@ se obtiene una representación UTC sin información explícita de zona horaria.
 
 Se compararon estos resultados con las marcas `previous_sample_local` y `next_sample_local` presentes en algunos eventos de `context`. Estas presentan una diferencia de ocho horas respecto a la representación obtenida desde Unix.
 
-<<<<<<< HEAD
 **Limitación:** no se ha confirmado documentalmente a qué zona horaria corresponde esa representación local.
 
-=======
->>>>>>> 0a23a0d (docs: add source profiling and data quality documentation)
 **Decisión ETL:**
 - Conservar el timestamp original.
 - Registrar explícitamente la interpretación temporal aplicada.
@@ -564,8 +543,3 @@ Sin embargo, la fuente presenta limitaciones importantes relacionadas con interr
 Por lo tanto, el proceso ETL no debe limitarse a copiar datos desde SQLite hacia PostgreSQL. Debe incorporar validaciones, tipificación, trazabilidad y controles de calidad que permitan conservar el significado de los datos.
 
 La arquitectura Bronze → Silver → Gold permitirá mantener los registros originales, producir información estructurada y construir indicadores analíticos confiables, haciendo explícitas las limitaciones de la fuente.
-<<<<<<< HEAD
-=======
-
-**Principio de diseño:** no transformar un dato cuyo significado no ha sido confirmado como si fuera una medición conocida.
->>>>>>> 0a23a0d (docs: add source profiling and data quality documentation)
