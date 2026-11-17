@@ -30,4 +30,3 @@ temp/
 .vscode/
 .idea/
 
-git add .gitignore docs/
