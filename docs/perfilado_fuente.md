@@ -1,12 +1,14 @@
 # Perfilado de la fuente de datos y limitaciones
 
 **Proyecto:** SolarBI Orquestado  
-**Fuente:** OpenCEM v1.0.0 (https://zenodo.org/records/21436223) 
+**Fuente:** OpenCEM v1.0.0  
 **Base de datos original:** SQLite  
 **Archivo:** `data/bronze/opencem-v1.0.0.sqlite`  
-**Capa:** Bronze
-**Estado:** Perfilado inicial 
+**Capa:** Bronze – Datos originales  
+**Estado:** Perfilado inicial completado  
 **Fecha de documentación:** 16 de noviembre de 2026
+
+---
 
 ## 1. Objetivo
 
@@ -24,7 +26,7 @@ Archivo original:
 
 `data/bronze/opencem-v1.0.0.sqlite`
 
-El archivo se conserva en la capa Bronze como fuente histórica original, sin alteraciones.
+El archivo se conserva en la capa Bronze como fuente histórica original, sin modificaciones.
 
 ### 2.1 Integridad del archivo
 
@@ -42,7 +44,8 @@ El hash corresponde al archivo comprimido original descargado, no al archivo SQL
 
 Durante la inspección del esquema se identificaron las siguientes tablas:
 
-| Tabla | Descripción funcional preliminar |---|---|
+| Tabla | Descripción funcional preliminar |
+|---|---|
 | `analog_measurements` | Mediciones eléctricas, batería, paneles fotovoltaicos, red y carga |
 | `context` | Eventos y registros contextuales en formato JSON |
 | `fault_history` | Historial de fallos y registros asociados |
@@ -72,7 +75,7 @@ También se encontraron `sqlite_stat1` y `sqlite_stat4`, utilizadas por SQLite p
 | 1 | 1.279.772 | 2025-07-12 13:31:35 | 2026-07-13 05:13:53 |
 | 2 | 1.006.132 | 2025-07-14 05:53:32 | 2026-06-22 05:35:24 |
 
-La fuente contiene aproximadamente un año de información sin embargo, la cobertura no es continua y presenta interrupciones temporales.
+La fuente contiene aproximadamente un año de información. Sin embargo, la cobertura no es continua y presenta interrupciones temporales.
 
 **Limitación:** no se debe interpretar el rango entre la primera y última fecha como un año completo de mediciones ininterrumpidas.
 
@@ -141,6 +144,8 @@ Al convertirlas mediante:
 se obtiene una representación UTC sin información explícita de zona horaria.
 
 Se compararon estos resultados con las marcas `previous_sample_local` y `next_sample_local` presentes en algunos eventos de `context`. Estas presentan una diferencia de ocho horas respecto a la representación obtenida desde Unix.
+
+**Limitación:** no se ha confirmado documentalmente a qué zona horaria corresponde esa representación local.
 
 **Decisión ETL:**
 - Conservar el timestamp original.
@@ -539,5 +544,3 @@ Sin embargo, la fuente presenta limitaciones importantes relacionadas con interr
 Por lo tanto, el proceso ETL no debe limitarse a copiar datos desde SQLite hacia PostgreSQL. Debe incorporar validaciones, tipificación, trazabilidad y controles de calidad que permitan conservar el significado de los datos.
 
 La arquitectura Bronze → Silver → Gold permitirá mantener los registros originales, producir información estructurada y construir indicadores analíticos confiables, haciendo explícitas las limitaciones de la fuente.
-
-**Principio de diseño:** no transformar un dato cuyo significado no ha sido confirmado como si fuera una medición conocida.
