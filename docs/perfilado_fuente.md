@@ -1,5 +1,11 @@
 # Perfilado de la fuente de datos y limitaciones
 
+**Proyecto:** SolarBI Orquestado  
+**Fuente:** OpenCEM v1.0.0  
+**Base de datos original:** SQLite  
+**Archivo:** `data/bronze/opencem-v1.0.0.sqlite`  
+**Capa:** Bronze – Datos originales  
+**Estado:** Perfilado inicial completado  
 **Proyecto:** SolarBI Orquestado
 **Fuente:** OpenCEM v1.0.0 ([Zenodo](https://zenodo.org/records/21436223))
 **Base de datos original:** SQLite
@@ -7,6 +13,8 @@
 **Capa:** Bronze – Datos originales
 **Estado:** Perfilado inicial completado
 **Fecha de documentación:** 16 de noviembre de 2026
+
+---
 
 ---
 
@@ -27,6 +35,7 @@ Archivo original:
 `data/bronze/opencem-v1.0.0.sqlite`
 
 El archivo se conserva en la capa Bronze como fuente histórica original, sin modificaciones.
+El archivo se conserva en la capa Bronze como fuente histórica original, sin modificaciones.
 
 ### 2.1 Integridad del archivo
 
@@ -44,6 +53,8 @@ El hash corresponde al archivo comprimido original descargado, no al archivo SQL
 
 Durante la inspección del esquema se identificaron las siguientes tablas:
 
+| Tabla | Descripción funcional preliminar |
+|---|---|
 | Tabla | Descripción funcional preliminar |
 |---|---|
 | `analog_measurements` | Mediciones eléctricas, batería, paneles fotovoltaicos, red y carga |
@@ -74,6 +85,8 @@ También se encontraron `sqlite_stat1` y `sqlite_stat4`, utilizadas por SQLite p
 |---|---:|---|---|
 | 1 | 1.279.772 | 2025-07-12 13:31:35 | 2026-07-13 05:13:53 |
 | 2 | 1.006.132 | 2025-07-14 05:53:32 | 2026-06-22 05:35:24 |
+
+La fuente contiene aproximadamente un año de información. Sin embargo, la cobertura no es continua y presenta interrupciones temporales.
 
 El archivo se conserva en la capa Bronze como fuente histórica original, sin modificaciones.
 **Limitación:** no se debe interpretar el rango entre la primera y última fecha como un año completo de mediciones ininterrumpidas.
@@ -143,6 +156,8 @@ Al convertirlas mediante:
 se obtiene una representación UTC sin información explícita de zona horaria.
 
 Se compararon estos resultados con las marcas `previous_sample_local` y `next_sample_local` presentes en algunos eventos de `context`. Estas presentan una diferencia de ocho horas respecto a la representación obtenida desde Unix.
+
+**Limitación:** no se ha confirmado documentalmente a qué zona horaria corresponde esa representación local.
 
 **Limitación:** no se ha confirmado documentalmente a qué zona horaria corresponde esa representación local.
 
