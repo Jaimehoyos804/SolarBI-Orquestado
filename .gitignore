@@ -1,0 +1,33 @@
+
+# Entornos Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Datos originales y archivos pesados
+data/bronze/*
+!data/bronze/.gitkeep
+
+# Datos procesados y temporales
+data/silver/
+data/gold/
+data/temp/
+data/processed/
+
+# Logs y archivos temporales
+*.log
+logs/
+tmp/
+temp/
+
+# Configuración local de herramientas
+.vscode/
+.idea/
+
+git add .gitignore docs/
