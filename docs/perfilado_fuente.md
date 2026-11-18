@@ -558,3 +558,113 @@ Sin embargo, la fuente presenta limitaciones importantes relacionadas con interr
 Por lo tanto, el proceso ETL no debe limitarse a copiar datos desde SQLite hacia PostgreSQL. Debe incorporar validaciones, tipificación, trazabilidad y controles de calidad que permitan conservar el significado de los datos.
 
 La arquitectura Bronze → Silver → Gold permitirá mantener los registros originales, producir información estructurada y construir indicadores analíticos confiables, haciendo explícitas las limitaciones de la fuente.
+
+======================================================================================
+
+## 4. Perfilamiento de la tabla context
+
+### 4.1 Estructura y volumen
+
+La tabla `context` contiene 25.178 registros y cinco columnas:
+
+- `id`: identificador entero y clave primaria.
+- `recorded`: timestamp de registro.
+- `start`: inicio del intervalo del evento.
+- `end`: final del intervalo del evento.
+- `value`: contenido JSON almacenado como texto.
+
+Se verificó que los 25.178 valores de `value` contienen JSON válido. No se encontraron valores SQL NULL ni documentos JSON inválidos.
+
+### 4.2 Estructura del contenido JSON
+
+El contenido de `value` presenta propiedades heterogéneas dependiendo del tipo de evento y su fuente.
+
+Entre las propiedades identificadas se encuentran:
+
+- `source`
+- `context_type`
+- `inverter`
+- `device`
+- `textual_description`
+- `task_type`
+- `command`
+- `metrics`
+- `metadata`
+- `activity_types`
+
+También existen propiedades específicas para eventos de generación solar, batería, actividad informática, eventos del sistema operativo, calendarios y calidad de datos.
+
+Se identificaron 53 tipos de contexto aproximadamente, además de registros sin `context_type`.
+
+La propiedad `source` está presente en los 25.178 registros.
+
+### 4.3 Distribución y heterogeneidad
+
+Las fuentes más representativas son:
+
+- `workstation2_log`: 8.902 registros.
+- `windows_event_log`: 6.271 registros.
+- `workstation1_log`: 6.028 registros.
+- `derived_context_pipeline`: 3.708 registros.
+- `wsl_bash_history`: 204 registros.
+- `manual entry`: 60 registros.
+- `manual_workload_entry`: 5 registros.
+
+Se identificaron 42 registros sin la propiedad `inverter`. Estos registros no deben asociarse artificialmente a un inversor.
+
+La propiedad `inverter` y otras propiedades del JSON pueden estar ausentes o contener valores nulos. Su tratamiento debe conservar esta condición.
+
+### 4.4 Validación temporal
+
+Se analizaron las relaciones entre `recorded`, `start` y `end`.
+
+Resultados:
+
+- No se encontraron intervalos invertidos (`start > end`).
+- No se encontraron duraciones negativas.
+- Se identificaron 2.163 registros con duración cero:
+  - 2.161 procedentes de `workstation2_log`.
+  - 2 procedentes de `manual entry`.
+- Se encontraron registros con `recorded < start`.
+- Se encontraron registros con `recorded > end`.
+
+Las duraciones cero corresponden principalmente a eventos puntuales de compilación y pruebas de software. No deben convertirse automáticamente en NULL ni modificarse para asignarles una duración artificial.
+
+Las diferencias entre `recorded` y los límites del intervalo aparecen principalmente en registros manuales, eventos retrospectivos y eventos de detección posterior, como `unexpected_shutdown`.
+
+Estas condiciones no se consideran errores automáticos. Deben conservarse y marcarse mediante indicadores de calidad temporal.
+
+### 4.5 Reglas de transformación
+
+Para la futura capa Silver se establecen las siguientes reglas:
+
+1. Conservar el identificador original `id`.
+2. Conservar los timestamps epoch originales.
+3. Generar columnas temporales UTC adicionales sin modificar los valores originales.
+4. Calcular `duration_seconds` como `end - start`.
+5. Mantener `context_type` como nullable.
+6. Mantener `inverter` y `device` como nullable.
+7. Conservar el documento JSON completo en una columna `value_raw`.
+8. No descartar propiedades JSON desconocidas.
+9. No sustituir valores ausentes por valores artificiales.
+10. Marcar las condiciones temporales sin corregir los timestamps originales.
+
+### 4.6 Clasificación semántica propuesta
+
+Se propone crear una columna derivada `event_domain`, manteniendo intacto el `context_type` original.
+
+Clasificaciones iniciales:
+
+- `energy_operations`: generación fotovoltaica, carga y descarga de baterías, y disponibilidad de red.
+- `data_quality`: brechas de datos, cobertura y observaciones de calidad de telemetría.
+- `system_infrastructure`: mantenimiento del sistema operativo, errores de almacenamiento y apagados inesperados.
+- `external_activity`: compilaciones, entrenamiento de modelos, calendarios y actividad de desarrollo.
+- `other_unclassified`: eventos que no puedan clasificarse con reglas explícitas.
+
+La clasificación deberá implementarse mediante reglas reproducibles y contar con una categoría de respaldo.
+
+### 4.7 Conclusión
+
+La tabla `context` contiene información heterogénea, temporal y semiestructurada. Su transformación requiere conservar el JSON original y separar los atributos comunes de las propiedades específicas de cada evento.
+
+El perfilamiento no identificó intervalos invertidos ni duraciones negativas. Las particularidades temporales encontradas deberán conservarse como información de calidad y no corregirse automáticamente.
