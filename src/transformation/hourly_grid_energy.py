@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 
 from src.extraction.sqlite_reader import get_connection
 
-LOCAL_TZ = ZoneInfo("America/Bogota")
+LOCAL_TZ = ZoneInfo("Asia/Shanghai")
 MAX_GAP_SECONDS = 300
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

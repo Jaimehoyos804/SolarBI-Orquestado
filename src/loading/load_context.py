@@ -26,11 +26,11 @@ INSERT INTO gold.fact_evento_operativo
 SELECT e.id,
        CASE WHEN e.inverter IN (1, 2) THEN e.inverter END,
        d.fecha_key,
-       extract(hour FROM e.start_ts AT TIME ZONE 'America/Bogota')::smallint,
+       extract(hour FROM e.start_ts AT TIME ZONE 'Asia/Shanghai')::smallint,
        e.context_type, e.start_ts, e.end_ts,
        round(extract(epoch FROM e.end_ts - e.start_ts) / 3600.0, 2)
 FROM silver.context_evento e
-JOIN gold.dim_fecha d ON d.fecha = (e.start_ts AT TIME ZONE 'America/Bogota')::date
+JOIN gold.dim_fecha d ON d.fecha = (e.start_ts AT TIME ZONE 'Asia/Shanghai')::date
 ON CONFLICT (evento_id) DO UPDATE SET
   inverter_key = EXCLUDED.inverter_key, fecha_key = EXCLUDED.fecha_key,
   hora_key = EXCLUDED.hora_key, context_type = EXCLUDED.context_type,

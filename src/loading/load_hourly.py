@@ -29,8 +29,8 @@ INSERT INTO gold.fact_energia_red_hora
   (inverter_key, fecha_key, hora_key, hour_local, positive_power_unit_hours,
    negative_power_unit_hours, net_power_unit_hours, coverage_minutes)
 SELECT inverter,
-       to_char(hour_local AT TIME ZONE 'America/Bogota', 'YYYYMMDD')::int,
-       extract(hour FROM hour_local AT TIME ZONE 'America/Bogota')::smallint,
+       to_char(hour_local AT TIME ZONE 'Asia/Shanghai', 'YYYYMMDD')::int,
+       extract(hour FROM hour_local AT TIME ZONE 'Asia/Shanghai')::smallint,
        hour_local, positive_power_unit_hours, negative_power_unit_hours,
        net_power_unit_hours, coverage_minutes
 FROM silver.energia_red_hora
