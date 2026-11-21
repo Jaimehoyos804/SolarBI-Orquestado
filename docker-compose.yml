@@ -5,11 +5,11 @@ services:
     image: postgres:16.6
     container_name: solarbi-postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:?falta POSTGRES_USER en .env}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?falta POSTGRES_PASSWORD en .env}
-      POSTGRES_DB: ${POSTGRES_DB:?falta POSTGRES_DB en .env}
+      POSTGRES_USER: ${DB_USER:?falta DB_USER en .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+      POSTGRES_DB: ${DB_NAME:?falta DB_NAME en .env}
     ports:
-      - "5433:5432"
+      - "${DB_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./database/ddl:/docker-entrypoint-initdb.d:ro
