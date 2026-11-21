@@ -1,0 +1,347 @@
+{
+  "uid": "solarbi-linea4",
+  "title": "SolarBI · Dependencia de la red (línea 4)",
+  "tags": [
+    "solarbi",
+    "linea4"
+  ],
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "timezone": "utc",
+  "refresh": "",
+  "time": {
+    "from": "2026-03-25T00:00:00.000Z",
+    "to": "2026-07-14T00:00:00.000Z"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "inversor",
+        "label": "Inversor",
+        "type": "query",
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "solarbi-pg"
+        },
+        "query": "SELECT inverter_key AS __value, nombre AS __text FROM gold.dim_inversor ORDER BY 1",
+        "multi": true,
+        "includeAll": true,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "refresh": 1,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Horas sin red (eventos)",
+      "description": "Suma de eventos grid_unavailable_or_islanded (derivados de las mismas mediciones; no es una fuente independiente).",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT COALESCE(sum(horas_sin_red), 0) AS horas_sin_red FROM gold.vw_horas_sin_red_dia WHERE inverter_key IN (${inversor:csv}) AND $__timeFilter(fecha)"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Disponibilidad del registro",
+      "description": "Porcentaje del día con telemetría. NO es disponibilidad de la red.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT avg(disponibilidad_pct) AS disponibilidad FROM gold.vw_kpi_red_dia WHERE variable_key = 'linepowerw_a' AND inverter_key IN (${inversor:csv}) AND $__timeFilter(fecha)"
+        }
+      ],
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "table",
+      "title": "Último dato por inversor (linepowerw_a)",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT i.nombre AS \"Inversor\", f.hour_local AS \"Última hora con datos\", round(f.positive_power_unit_hours, 1) AS \"Importada en esa hora\", round(f.cobertura_pct, 0) AS \"Cobertura %\" FROM (SELECT DISTINCT ON (inverter_key) * FROM gold.fact_energia_red_hora WHERE variable_key = 'linepowerw_a' ORDER BY inverter_key, hour_local DESC) f JOIN gold.dim_inversor i USING (inverter_key) WHERE f.inverter_key IN (${inversor:csv}) ORDER BY 1"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Importación diaria (linepowerw_a, unidades·hora)",
+      "description": "Variable candidata, unidad sin confirmar: se reporta en unidades de potencia por hora, no en kWh.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT fecha::timestamp AS time, 'Inversor ' || inverter_key AS metric, importada_unit_h AS value FROM gold.vw_kpi_red_dia WHERE variable_key = 'linepowerw_a' AND inverter_key IN (${inversor:csv}) AND $__timeFilter(fecha) ORDER BY 1"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "% de la importación en horas sin sol",
+      "description": "Mide que de noche no hay sol; no equivale a dependencia de la red.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT fecha::timestamp AS time, 'Inversor ' || inverter_key AS metric, pct_importada_noche AS value FROM gold.vw_kpi_red_dia WHERE variable_key = 'linepowerw_a' AND inverter_key IN (${inversor:csv}) AND $__timeFilter(fecha) ORDER BY 1"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Horas sin red por día (eventos)",
+      "description": "",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "solarbi-pg"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "solarbi-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT fecha::timestamp AS time, 'Inversor ' || inverter_key AS metric, horas_sin_red AS value FROM gold.vw_horas_sin_red_dia WHERE inverter_key IN (${inversor:csv}) AND $__timeFilter(fecha) ORDER BY 1"
+        }
+      ],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 1,
+            "fillOpacity": 30,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      }
+    }
+  ]
+}
