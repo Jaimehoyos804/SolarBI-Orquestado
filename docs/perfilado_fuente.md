@@ -668,3 +668,134 @@ La clasificación deberá implementarse mediante reglas reproducibles y contar c
 La tabla `context` contiene información heterogénea, temporal y semiestructurada. Su transformación requiere conservar el JSON original y separar los atributos comunes de las propiedades específicas de cada evento.
 
 El perfilamiento no identificó intervalos invertidos ni duraciones negativas. Las particularidades temporales encontradas deberán conservarse como información de calidad y no corregirse automáticamente.
+
+## 5. Perfilamiento de analog_measurements
+
+### 5.1 Estructura e integridad
+
+La tabla contiene 2.989.759 registros y 44 columnas.
+
+Los campos `read_ts` e `inverter` son obligatorios. Ninguno está declarado como clave primaria.
+
+Se identificó el índice único `analog_measurements_read_ts_inverter_uidx`, compuesto por `(read_ts, inverter)`.
+
+La combinación presenta unicidad en todos los registros:
+
+- Inversor 1: 1.610.276 registros y 1.610.276 timestamps distintos.
+- Inversor 2: 1.379.483 registros y 1.379.483 timestamps distintos.
+
+Se conserva esta combinación como candidata a clave natural para el modelo dimensional.
+
+### 5.2 Valores NULL y numéricos
+
+Las mediciones opcionales presentan valores NULL. En varias columnas la cantidad se encuentra alrededor de 58.000 registros.
+
+Los valores NULL deben conservarse como ausencia de medición y no convertirse automáticamente en cero.
+
+Se identificaron seis columnas cuyos valores no nulos son exclusivamente cero en ambos inversores:
+
+- `normalloadw_a`
+- `generatedpowers_a`
+- `generatedpowerq_a`
+- `busvoltn`
+- `sir`
+- `fanduty`
+
+Estos campos se consideran constantes en el período observado. No se eliminarán automáticamente.
+
+### 5.3 Valores negativos y extremos
+
+Se encontraron valores negativos en:
+
+- `battcurr`
+- `generatedpowerp_a`
+- `linecurra`
+- `linepowerva_a`
+- `linepowerw_a`
+- `gridpowerw_a`
+
+Los valores negativos se conservan porque podrían representar dirección del flujo eléctrico. Su interpretación requiere documentación técnica del equipo.
+
+Otros hallazgos:
+
+- `loadpercenta` alcanza 102 en dos registros del inversor 2.
+- `temper4` registra exclusivamente 120 en sus valores no nulos, en ambos inversores.
+- `pv1volt` alcanza 492.6.
+- `generatedpowerp_a` alcanza -1519.
+
+Estos valores quedan identificados para revisión semántica. No se consideran errores confirmados.
+
+### 5.4 Columnas semiestructuradas
+
+Se analizaron `battreserve`, `pvreserve`, `otherreserve` y `grid_reserve`.
+
+Las cuatro columnas contienen arreglos JSON válidos en sus registros no nulos.
+
+La estructura predominante es:
+
+- `battreserve`: 5 elementos.
+- `pvreserve`: 4 elementos.
+- `otherreserve`: 5 elementos.
+- `grid_reserve`: 10 elementos.
+
+Se encontraron arreglos `[null]` de un elemento:
+
+- `battreserve`: 56.130 registros.
+- `pvreserve`: 56.008 registros.
+- `otherreserve`: 56.192 registros.
+- `grid_reserve`: 56.216 registros.
+
+También existen valores SQL NULL, que deben diferenciarse de los arreglos JSON `[null]`.
+
+Los arreglos de longitud esperada examinados no presentaron muestras distintas del arreglo compuesto por ceros.
+
+Regla de transformación: preservar el contenido original y no convertir `[null]` en SQL NULL ni en arreglos de ceros.
+
+### 5.5 Comportamiento temporal
+
+Rangos observados:
+
+- Inversor 1: 1752327095.265811 a 1783919633.451776.
+- Inversor 2: 1752472412.761199 a 1782106524.235112.
+
+Intervalo promedio entre mediciones:
+
+- Inversor 1: 19,62 segundos.
+- Inversor 2: 21,48 segundos.
+
+No se encontraron timestamps repetidos dentro de cada inversor ni intervalos de cero segundos.
+
+Se identificaron brechas temporales importantes:
+
+| Umbral | Inversor 1 | Inversor 2 |
+|---|---:|---:|
+| Mayor a 1 minuto | 47.959 | 47.560 |
+| Mayor a 5 minutos | 4.527 | 4.126 |
+| Mayor a 1 hora | 16 | 15 |
+| Mayor a 1 día | 3 | 3 |
+
+La mayor brecha observada fue de 2.259.069,49 segundos, aproximadamente 26,15 días.
+
+Algunas de las mayores brechas comparten los mismos timestamps de inicio y final entre ambos inversores, lo que sugiere interrupciones comunes de captura o disponibilidad.
+
+### 5.6 Reglas para Silver
+
+1. Conservar `read_ts` e `inverter` como identificadores originales.
+2. Mantener la combinación `(read_ts, inverter)` como clave candidata.
+3. Conservar los valores NULL y cero de manera diferenciada.
+4. No eliminar columnas constantes sin una decisión documentada.
+5. No eliminar valores negativos ni extremos sin justificación técnica.
+6. Preservar los arreglos JSON originales y sus diferencias estructurales.
+7. Generar indicadores de calidad para valores y discontinuidades temporales.
+8. No interpolar ni inventar mediciones durante las brechas.
+9. Mantener la fuente Bronze inmutable.
+
+### 5.7 Conclusión
+
+La tabla presenta integridad de unicidad por inversor, mediciones opcionales con valores NULL, campos constantes, valores negativos y columnas semiestructuradas.
+
+La frecuencia de muestreo habitual es cercana a los 20 segundos, aunque existen interrupciones de distinta duración.
+
+La información debe conservarse sin correcciones automáticas y las condiciones identificadas deben quedar disponibles para las validaciones de Silver.
+
+
