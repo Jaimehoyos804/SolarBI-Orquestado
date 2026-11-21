@@ -51,6 +51,23 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
+  
+  simulador:
+    build: .
+    image: solarbi-etl:1.0
+    command: ["python", "-m", "src.simulation.stream_simulator"]
+    profiles: ["sim"]
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:?falta DB_NAME en .env}
+      DB_USER: ${DB_USER:?falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+      SIM_INTERVALO_S: "5"
 
 volumes:
   pgdata:

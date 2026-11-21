@@ -1,6 +1,6 @@
 {
   "uid": "solarbi-vivo",
-  "title": "SolarBI · Operación en vivo (simulador)",
+  "title": "SolarBI · Operación en vivo",
   "tags": [
     "solarbi",
     "vivo"
@@ -143,7 +143,7 @@
     {
       "id": 3,
       "type": "timeseries",
-      "title": "Voltaje de línea en vivo (simulado)",
+      "title": "Voltaje de línea en vivo ",
       "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "solarbi-pg"
@@ -208,7 +208,7 @@
     {
       "id": 4,
       "type": "timeseries",
-      "title": "Potencia de línea en vivo (simulada)",
+      "title": "Potencia de línea en vivo",
       "datasource": {
         "type": "grafana-postgresql-datasource",
         "uid": "solarbi-pg"
