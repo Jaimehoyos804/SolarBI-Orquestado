@@ -2,14 +2,15 @@ CREATE SCHEMA IF NOT EXISTS silver;
 CREATE SCHEMA IF NOT EXISTS gold;
 
 CREATE TABLE IF NOT EXISTS silver.energia_red_hora (
-    inverter                  smallint        NOT NULL,
-    hour_local                timestamptz     NOT NULL,
-    positive_power_unit_hours numeric(18,6)   NOT NULL,
-    negative_power_unit_hours numeric(18,6)   NOT NULL,
-    net_power_unit_hours      numeric(18,6)   NOT NULL,
-    coverage_minutes          numeric(5,2)    NOT NULL CHECK (coverage_minutes BETWEEN 0 AND 60),
-    contributing_segments     integer         NOT NULL CHECK (contributing_segments > 0),
-    PRIMARY KEY (inverter, hour_local),
+    inverter                  smallint      NOT NULL,
+    variable                  text          NOT NULL,
+    hour_local                timestamptz   NOT NULL,
+    positive_power_unit_hours numeric(18,6) NOT NULL,
+    negative_power_unit_hours numeric(18,6) NOT NULL,
+    net_power_unit_hours      numeric(18,6) NOT NULL,
+    coverage_minutes          numeric(5,2)  NOT NULL CHECK (coverage_minutes BETWEEN 0 AND 60),
+    contributing_segments     integer       NOT NULL CHECK (contributing_segments > 0),
+    PRIMARY KEY (inverter, variable, hour_local),
     CHECK (abs(net_power_unit_hours - (positive_power_unit_hours - negative_power_unit_hours)) < 0.00001)
 );
 
@@ -20,6 +21,21 @@ CREATE TABLE IF NOT EXISTS gold.dim_inversor (
 );
 INSERT INTO gold.dim_inversor VALUES (1, 'Inversor 1'), (2, 'Inversor 2')
 ON CONFLICT DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS gold.dim_variable (
+    variable_key     text PRIMARY KEY,          
+    descripcion      text NOT NULL,
+    unidad_declarada text NOT NULL,
+    estado           text NOT NULL CHECK (estado IN ('sin_confirmar', 'candidata', 'confirmada')),
+    notas            text
+);
+INSERT INTO gold.dim_variable VALUES
+ ('gridpowerw_a',  'Potencia de red reportada por el inversor', 'W (hipótesis)', 'sin_confirmar',
+  'Perfil horario casi plano; no se comporta como importación'),
+ ('linepowerw_a',  'Potencia de línea reportada por el inversor', 'W (hipótesis)', 'candidata',
+  'Alta de noche y cercana a 0 a mediodía en el inversor 1')
+ON CONFLICT DO NOTHING;
+
 
 CREATE TABLE IF NOT EXISTS gold.dim_fecha (
     fecha_key        integer PRIMARY KEY,         
@@ -58,15 +74,18 @@ FROM generate_series(0, 23) AS h
 ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS gold.fact_energia_red_hora (
-    inverter_key              smallint     NOT NULL REFERENCES gold.dim_inversor,
-    fecha_key                 integer      NOT NULL REFERENCES gold.dim_fecha,
-    hora_key                  smallint     NOT NULL REFERENCES gold.dim_hora,
-    hour_local                timestamptz  NOT NULL,
+    inverter_key              smallint      NOT NULL REFERENCES gold.dim_inversor,
+    variable_key              text          NOT NULL REFERENCES gold.dim_variable,
+    fecha_key                 integer       NOT NULL REFERENCES gold.dim_fecha,
+    hora_key                  smallint      NOT NULL REFERENCES gold.dim_hora,
+    hour_local                timestamptz   NOT NULL,
     positive_power_unit_hours numeric(18,6) NOT NULL,
     negative_power_unit_hours numeric(18,6) NOT NULL,
     net_power_unit_hours      numeric(18,6) NOT NULL,
     coverage_minutes          numeric(5,2)  NOT NULL,
     cobertura_pct numeric(5,2) GENERATED ALWAYS AS (round(coverage_minutes / 60 * 100, 2)) STORED,
-    PRIMARY KEY (inverter_key, hour_local)
+    PRIMARY KEY (inverter_key, variable_key, hour_local)
 );
 CREATE INDEX IF NOT EXISTS ix_fact_fecha ON gold.fact_energia_red_hora (fecha_key, hora_key);
+
+

@@ -13,10 +13,10 @@ TOL = 1e-4
 
 UPSERT_SILVER = """
 INSERT INTO silver.energia_red_hora
-  (inverter, hour_local, positive_power_unit_hours, negative_power_unit_hours,
+  (inverter, variable, hour_local, positive_power_unit_hours, negative_power_unit_hours,
    net_power_unit_hours, coverage_minutes, contributing_segments)
-VALUES (%s, %s, %s, %s, %s, %s, %s)
-ON CONFLICT (inverter, hour_local) DO UPDATE SET
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+ON CONFLICT (inverter, variable, hour_local) DO UPDATE SET
   positive_power_unit_hours = EXCLUDED.positive_power_unit_hours,
   negative_power_unit_hours = EXCLUDED.negative_power_unit_hours,
   net_power_unit_hours      = EXCLUDED.net_power_unit_hours,
@@ -26,15 +26,15 @@ ON CONFLICT (inverter, hour_local) DO UPDATE SET
 
 UPSERT_GOLD = """
 INSERT INTO gold.fact_energia_red_hora
-  (inverter_key, fecha_key, hora_key, hour_local, positive_power_unit_hours,
+  (inverter_key, variable_key, fecha_key, hora_key, hour_local, positive_power_unit_hours,
    negative_power_unit_hours, net_power_unit_hours, coverage_minutes)
-SELECT inverter,
+SELECT inverter, variable,
        to_char(hour_local AT TIME ZONE 'Asia/Shanghai', 'YYYYMMDD')::int,
        extract(hour FROM hour_local AT TIME ZONE 'Asia/Shanghai')::smallint,
        hour_local, positive_power_unit_hours, negative_power_unit_hours,
        net_power_unit_hours, coverage_minutes
 FROM silver.energia_red_hora
-ON CONFLICT (inverter_key, hour_local) DO UPDATE SET
+ON CONFLICT (inverter_key, variable_key, hour_local) DO UPDATE SET
   fecha_key = EXCLUDED.fecha_key,
   hora_key = EXCLUDED.hora_key,
   positive_power_unit_hours = EXCLUDED.positive_power_unit_hours,
@@ -44,17 +44,17 @@ ON CONFLICT (inverter_key, hour_local) DO UPDATE SET
 """
 
 SUMS = """
-SELECT {inv}, count(*), sum(positive_power_unit_hours),
+SELECT {inv}, {var}, count(*), sum(positive_power_unit_hours),
        sum(negative_power_unit_hours), sum(net_power_unit_hours)
-FROM {table} GROUP BY {inv} ORDER BY {inv}
+FROM {table} GROUP BY {inv}, {var} ORDER BY {inv}, {var}
 """
 
 
 def connect():
-    load_dotenv(PROJECT_ROOT / ".env")
+    load_dotenv(PROJECT_ROOT / ".env", override=True)
     return psycopg.connect(
         host=os.getenv("DB_HOST", "localhost"),
-        port=os.getenv("DB_PORT", "5433"),
+        port=os.getenv("DB_PORT", "5434"),
         dbname=os.environ["DB_NAME"],
         user=os.environ["DB_USER"],
         password=os.environ["DB_PASSWORD"],
@@ -64,12 +64,12 @@ def connect():
 def main():
     df = pd.read_csv(CSV_PATH)
     rows = [
-        (int(r.inverter), datetime.fromisoformat(r.hour_local),
+        (int(r.inverter), r.variable, datetime.fromisoformat(r.hour_local),
          r.positive_power_unit_hours, r.negative_power_unit_hours,
          r.net_power_unit_hours, r.coverage_minutes, int(r.contributing_segments))
         for r in df.itertuples(index=False)
     ]
-    expected = df.groupby("inverter").agg(
+    expected = df.groupby(["inverter", "variable"]).agg(
         n=("hour_local", "count"),
         pos=("positive_power_unit_hours", "sum"),
         neg=("negative_power_unit_hours", "sum"),
@@ -77,24 +77,23 @@ def main():
     )
 
     ok = True
-    with connect() as conn:                      
+    with connect() as conn:
         with conn.cursor() as cur:
             cur.executemany(UPSERT_SILVER, rows)
             cur.execute(UPSERT_GOLD)
 
-            for table, inv in (("silver.energia_red_hora", "inverter"),
-                               ("gold.fact_energia_red_hora", "inverter_key")):
-                cur.execute(SUMS.format(table=table, inv=inv))
+            for table, inv, var in (("silver.energia_red_hora", "inverter", "variable"),
+                                    ("gold.fact_energia_red_hora", "inverter_key", "variable_key")):
+                cur.execute(SUMS.format(table=table, inv=inv, var=var))
                 print(f"\nConciliación CSV vs {table}")
-                for i, n, pos, neg, net in cur.fetchall():
-                    e = expected.loc[i]
+                for i, v, n, pos, neg, net in cur.fetchall():
+                    e = expected.loc[(i, v)]
                     good = (n == e.n and abs(float(pos) - e.pos) < TOL
                             and abs(float(neg) - e.neg) < TOL
                             and abs(float(net) - e.net) < TOL)
                     ok &= good
-                    print(f"  inversor {i}: CSV={int(e.n)} filas / BD={n} filas "
-                          f"| net CSV={e.net:.4f} BD={float(net):.4f} "
-                          f"-> {'OK' if good else 'FALLA'}")
+                    print(f"  inv {i} · {v}: CSV={int(e.n)} / BD={n} filas "
+                          f"| net CSV={e.net:.4f} BD={float(net):.4f} -> {'OK' if good else 'FALLA'}")
         if not ok:
             conn.rollback()
             print("\nConciliación fallida: se revierte la transacción.")
