@@ -41,7 +41,7 @@ SELECT to_char(d, 'YYYYMMDD')::int, d::date,
        extract(day from d), extract(isodow from d),
        (ARRAY['lunes','martes','miércoles','jueves','viernes','sábado','domingo'])[extract(isodow from d)::int],
        extract(isodow from d) >= 6
-FROM generate_series('2025-07-01'::date, '2026-12-31'::date, interval '1 day') AS d
+FROM generate_series('2025-06-01'::date, '2026-12-31'::date, interval '1 day') AS d
 ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS gold.dim_hora (          
