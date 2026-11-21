@@ -18,6 +18,21 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  etl:
+    build: .
+    image: solarbi-etl:1.0
+    profiles: ["etl"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:?falta DB_NAME en .env}
+      DB_USER: ${DB_USER:?falta DB_USER en .env}
+      DB_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD en .env}
+    volumes:
+      - ./data/bronze:/app/data/bronze:ro
 
 volumes:
   pgdata:
