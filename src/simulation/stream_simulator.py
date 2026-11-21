@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 from src.loading.load_hourly import connect
 
 INTERVALO = float(os.getenv("SIM_INTERVALO_S", "5"))
+DURACION = float(os.getenv("SIM_DURACION_S", "0"))  
 V_NOMINAL = 235.0
 TZ = ZoneInfo("Asia/Shanghai")    
 
@@ -48,7 +49,9 @@ def main():
     with connect() as conn:
         conn.autocommit = True
         with conn.cursor() as cur:
-            while True:
+            fin = time.time() + DURACION if DURACION > 0 else None
+            cur.execute("DELETE FROM silver.lectura_vivo WHERE ts < now() - interval '2 days'")
+            while fin is None or time.time() < fin:
                 cur.execute("SELECT modo FROM silver.control_simulador WHERE id = 1")
                 modo = cur.fetchone()[0]
                 if modo != "silencio":
