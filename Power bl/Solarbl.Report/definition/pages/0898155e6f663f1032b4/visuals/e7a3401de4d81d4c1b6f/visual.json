@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "e7a3401de4d81d4c1b6f",
+  "position": {
+    "x": 358,
+    "y": 16,
+    "z": 1000,
+    "height": 280,
+    "width": 280,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Red kWh"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Red kWh",
+              "nativeQueryRef": "Red kWh"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_energia_red_hora"
+                  }
+                },
+                "Property": "Red kWh"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "3b243e5dc460290605fb",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_energia_red_hora"
+              }
+            },
+            "Property": "Red kWh"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

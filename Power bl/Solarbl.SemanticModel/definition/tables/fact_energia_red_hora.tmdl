@@ -1,0 +1,194 @@
+table fact_energia_red_hora
+	lineageTag: 975d7a57-dfab-40d8-8f0c-f6931683d851
+
+	measure 'Solar kWh' = ```
+			
+			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "pv1power") / 1000
+			```
+		lineageTag: 5691ad5a-6c4d-402b-b93e-535cece6d56d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Red kWh' = ```
+			
+			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "linepowerw_a") / 1000
+			```
+		lineageTag: bda4523c-b5ad-4be6-b367-5f812e119889
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Carga kWh' = ```
+			
+			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "outw_a") / 1000
+			```
+		lineageTag: 199f44a1-dcd3-493a-9e3f-c3f71135dd09
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Batería descarga kWh' = ```
+			
+			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "battpower_calc") / 1000
+			```
+		lineageTag: 2281d215-8feb-4d9d-a274-03a4e09b2ac4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Batería carga kWh' = ```
+			
+			      CALCULATE(SUM(fact_energia_red_hora[negative_power_unit_hours]), dim_variable[variable_key] = "battpower_calc") / 1000
+			```
+		lineageTag: ae42e098-edbe-4ec9-9e0e-6bf1cf7e5d77
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Entradas kWh' = [Solar kWh] + [Red kWh] + [Batería descarga kWh]
+		lineageTag: 9cd7a855-9540-4924-ac3d-8c940f92b6e4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Salidas kWh' = [Carga kWh] + [Batería carga kWh]
+		lineageTag: a6bf4f3c-5649-4724-ab58-cf9454646eb7
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No explicado kWh' = [Entradas kWh] - [Salidas kWh]
+		lineageTag: ff9ba3e6-f117-4494-bf66-af2982bbb41f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'No explicado %' = DIVIDE([No explicado kWh], [Entradas kWh])
+		lineageTag: f515264a-b49e-448b-a187-57b0b89b6926
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% red' = DIVIDE([Red kWh], [Entradas kWh])
+		lineageTag: 8d547dd1-f653-4085-bfdb-ac7c8fa5be33
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Red kWh mes anterior' =
+			
+			CALCULATE(
+			    [Red kWh],
+			    REMOVEFILTERS('dim_fecha'),
+			    DATEADD('dim_fecha'[fecha], -1, MONTH)
+			)
+		lineageTag: 4d814193-2097-4bea-9629-a1e821f661ff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Var % red vs mes anterior' = ```
+			
+			      DIVIDE([Red kWh] - [Red kWh mes anterior], [Red kWh mes anterior])
+			```
+		lineageTag: 331c08f8-ab7a-482a-a7e6-8d76909564b0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Disponibilidad del registro %' = ```
+			
+			      CALCULATE(AVERAGE(fact_energia_red_hora[cobertura_pct]), dim_variable[variable_key] = "linepowerw_a")
+			```
+		lineageTag: 2d68e51f-40a5-48d4-a084-4231cfd2c5ea
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column inverter_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b2fa4ecf-a9ca-4fbb-b17b-c588b8d141c7
+		summarizeBy: none
+		sourceColumn: inverter_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column variable_key
+		dataType: string
+		lineageTag: 76bace3c-3905-46b5-8736-87e4f0df652b
+		summarizeBy: none
+		sourceColumn: variable_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a261baf8-b1ea-4086-b4ba-f71ddf713eff
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column hora_key
+		dataType: int64
+		formatString: 0
+		lineageTag: e7111d83-e39d-43c0-8a95-9cdc9a64a939
+		summarizeBy: none
+		sourceColumn: hora_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column positive_power_unit_hours
+		dataType: double
+		lineageTag: a4754f64-e7c8-4811-998e-55c8228e3dee
+		summarizeBy: sum
+		sourceColumn: positive_power_unit_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column negative_power_unit_hours
+		dataType: double
+		lineageTag: a6ab978d-bc21-47c0-9ff9-8cb36c19400a
+		summarizeBy: sum
+		sourceColumn: negative_power_unit_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column net_power_unit_hours
+		dataType: double
+		lineageTag: 7373f3cf-c48a-4699-8827-6ab8057062e7
+		summarizeBy: sum
+		sourceColumn: net_power_unit_hours
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column coverage_minutes
+		dataType: double
+		lineageTag: 343ce23f-4a00-4208-8fcb-e0f50c3d5b70
+		summarizeBy: sum
+		sourceColumn: coverage_minutes
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column cobertura_pct
+		dataType: double
+		lineageTag: 213f0caf-150a-4edd-bd3d-4a12d0017465
+		summarizeBy: sum
+		sourceColumn: cobertura_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_energia_red_hora = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_fact_energia_red_hora = Origen{[Schema="gold",Item="fact_energia_red_hora"]}[Data],
+				    #"Columnas quitadas" = Table.RemoveColumns(gold_fact_energia_red_hora,{"hour_local"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

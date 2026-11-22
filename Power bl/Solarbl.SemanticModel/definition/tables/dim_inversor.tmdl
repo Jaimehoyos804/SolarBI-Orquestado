@@ -1,0 +1,31 @@
+table dim_inversor
+	lineageTag: 69a4073c-2568-47e6-9bd8-3525491f8ca9
+
+	column inverter_key
+		dataType: int64
+		formatString: 0
+		lineageTag: b21265d3-ccca-4127-8138-1bb4e5d756ab
+		summarizeBy: none
+		sourceColumn: inverter_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre
+		dataType: string
+		lineageTag: 1f9089f5-0b8a-4cf7-b556-5946c522765c
+		summarizeBy: none
+		sourceColumn: nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_inversor = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_dim_inversor = Origen{[Schema="gold",Item="dim_inversor"]}[Data]
+				in
+				    gold_dim_inversor
+
+	annotation PBI_ResultType = Table
+

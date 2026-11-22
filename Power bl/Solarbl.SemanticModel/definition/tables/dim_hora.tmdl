@@ -1,0 +1,42 @@
+table dim_hora
+	lineageTag: af75291b-d9d0-4ed4-b617-51c4b45a9e7f
+
+	column hora_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a59c9f28-5edc-4c7d-821f-0406bd15f330
+		summarizeBy: none
+		sourceColumn: hora_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column franja
+		dataType: string
+		lineageTag: bbd7cfd6-00ef-47e7-a7f5-d7c78ce517a4
+		summarizeBy: none
+		sourceColumn: franja
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_hora_solar
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7bd17bb2-20d2-405f-bb30-54d6dd803fa6
+		summarizeBy: none
+		sourceColumn: es_hora_solar
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_hora = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_dim_hora = Origen{[Schema="gold",Item="dim_hora"]}[Data]
+				in
+				    gold_dim_hora
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

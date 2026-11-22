@@ -1,0 +1,133 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 335.25097913057783,
+            "y": 484.38194591593839
+          },
+          "nodeIndex": "fact_energia_red_hora",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 74.722605574456225,
+            "y": 207.095608356046
+          },
+          "nodeIndex": "fact_evento_operativo",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 503.06143418060083,
+            "y": 130.74776364346064
+          },
+          "nodeIndex": "dim_fecha",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 799.6064816469584
+          },
+          "nodeIndex": "dim_hora",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 231.23345522247905,
+            "y": -50
+          },
+          "nodeIndex": "dim_inversor",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 496.07675667230228,
+            "y": 833.57047393698372
+          },
+          "nodeIndex": "dim_variable",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 709.06143418060083,
+            "y": 629.78523696849186
+          },
+          "nodeIndex": "Balance componentes",
+          "nodeLineageTag": "d16680fe-8408-4914-b7f4-69e74bfe077e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 796.26142731414575,
+            "y": 410.78523696849186
+          },
+          "nodeIndex": "Medidas",
+          "nodeLineageTag": "1bfcc1d7-ae76-4bc7-88a6-68e8793dcd1d",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 811.26142731414575,
+            "y": 155.78523696849186
+          },
+          "nodeIndex": "Tarifa",
+          "nodeLineageTag": "6b4305b5-7d5b-4408-aede-632dfa3bc646",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 50.356105793809505,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

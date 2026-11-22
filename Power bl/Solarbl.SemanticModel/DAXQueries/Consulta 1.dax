@@ -1,0 +1,26 @@
+DEFINE
+  MEASURE fact_energia_red_hora[Solar kWh] =
+      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "pv1power") / 1000
+  MEASURE fact_energia_red_hora[Red kWh] =
+      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "linepowerw_a") / 1000
+  MEASURE fact_energia_red_hora[Carga kWh] =
+      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "outw_a") / 1000
+  MEASURE fact_energia_red_hora[Batería descarga kWh] =
+      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "battpower_calc") / 1000
+  MEASURE fact_energia_red_hora[Batería carga kWh] =
+      CALCULATE(SUM(fact_energia_red_hora[negative_power_unit_hours]), dim_variable[variable_key] = "battpower_calc") / 1000
+  MEASURE fact_energia_red_hora[Entradas kWh] = [Solar kWh] + [Red kWh] + [Batería descarga kWh]
+  MEASURE fact_energia_red_hora[Salidas kWh] = [Carga kWh] + [Batería carga kWh]
+  MEASURE fact_energia_red_hora[No explicado kWh] = [Entradas kWh] - [Salidas kWh]
+  MEASURE fact_energia_red_hora[No explicado %] = DIVIDE([No explicado kWh], [Entradas kWh])
+  MEASURE fact_energia_red_hora[% red] = DIVIDE([Red kWh], [Entradas kWh])
+  MEASURE fact_energia_red_hora[Red kWh mes anterior] =
+      CALCULATE([Red kWh], DATEADD(dim_fecha[fecha], -1, MONTH))
+  MEASURE fact_energia_red_hora[Var % red vs mes anterior] =
+      DIVIDE([Red kWh] - [Red kWh mes anterior], [Red kWh mes anterior])
+  MEASURE fact_energia_red_hora[Disponibilidad del registro %] =
+      CALCULATE(AVERAGE(fact_energia_red_hora[cobertura_pct]), dim_variable[variable_key] = "linepowerw_a")
+  MEASURE fact_evento_operativo[Horas sin red] =
+      CALCULATE(SUM(fact_evento_operativo[duracion_horas]), fact_evento_operativo[context_type] = "grid_unavailable_or_islanded")
+
+EVALUATE ROW("Solar kWh", [Solar kWh], "Red kWh", [Red kWh], "Carga kWh", [Carga kWh])

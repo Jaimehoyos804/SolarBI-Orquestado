@@ -1,0 +1,109 @@
+table dim_fecha
+	lineageTag: ca840530-3857-4665-961e-18a557d503f9
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 8f4dff21-fa07-4024-9ad6-0d2d3e26e9d3
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: be4b89d6-bfce-4a4c-89d5-6ac82dcc5677
+		summarizeBy: none
+		sourceColumn: fecha
+
+		variation Variation
+			isDefault
+			relationship: 78aeb02f-09f6-460b-9361-7ed6784e2fcc
+			defaultHierarchy: LocalDateTable_a037bc08-47f0-47ef-988d-be53648c63b9.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c75dcb4-ecd3-4ce2-b5c7-8049a781c354
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 58a0ca1d-1561-4c48-89b2-e8261d50a4fb
+		summarizeBy: sum
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: f03e72c6-8f2c-4377-b850-e917c43d5c08
+		summarizeBy: sum
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_mes
+		dataType: string
+		lineageTag: 5be1fe9f-6d78-48e0-b9e1-6d50f9eac161
+		summarizeBy: none
+		sourceColumn: nombre_mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia
+		dataType: int64
+		formatString: 0
+		lineageTag: e63abe35-9997-4c2e-baea-6463eb9d060b
+		summarizeBy: sum
+		sourceColumn: dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column dia_semana
+		dataType: int64
+		formatString: 0
+		lineageTag: f1e43369-39e6-4775-bd4b-a9b2ae2c38f3
+		summarizeBy: sum
+		sourceColumn: dia_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_dia
+		dataType: string
+		lineageTag: 922e2b34-5315-4635-aec0-6618e8b67a9e
+		summarizeBy: none
+		sourceColumn: nombre_dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_fin_de_semana
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f6137ede-a6cf-413e-b4f2-c08aac0fd30b
+		summarizeBy: none
+		sourceColumn: es_fin_de_semana
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_fecha = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_dim_fecha = Origen{[Schema="gold",Item="dim_fecha"]}[Data]
+				in
+				    gold_dim_fecha
+
+	annotation PBI_ResultType = Table
+

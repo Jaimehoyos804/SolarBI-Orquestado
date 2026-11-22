@@ -1,0 +1,56 @@
+table dim_variable
+	lineageTag: 515b39af-c87a-4e93-b888-ae1d9f5523d2
+
+	column variable_key
+		dataType: string
+		lineageTag: 9ca9e403-956f-4ac3-8f46-1a177ec1efc0
+		summarizeBy: none
+		sourceColumn: variable_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion
+		dataType: string
+		lineageTag: d6e87460-e864-4839-bd7c-90154f759728
+		summarizeBy: none
+		sourceColumn: descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidad_declarada
+		dataType: string
+		lineageTag: 186778a3-4955-481e-83c5-9e8b7c7388cb
+		summarizeBy: none
+		sourceColumn: unidad_declarada
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado
+		dataType: string
+		lineageTag: bd8f5831-0afb-4575-9f9d-e2c62157a413
+		summarizeBy: none
+		sourceColumn: estado
+
+		annotation SummarizationSetBy = Automatic
+
+	column notas
+		dataType: string
+		lineageTag: c0647eb1-b586-4159-a174-1cfbf4244de9
+		summarizeBy: none
+		sourceColumn: notas
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_variable = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_dim_variable = Origen{[Schema="gold",Item="dim_variable"]}[Data]
+				in
+				    gold_dim_variable
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "fc6e31890be89fec29b3",
+  "position": {
+    "x": 32,
+    "y": 40,
+    "z": 0,
+    "height": 232.59083066718034,
+    "width": 279.93232717465952,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Solar kWh"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Solar kWh",
+              "nativeQueryRef": "Solar kWh"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_energia_red_hora"
+                  }
+                },
+                "Property": "Solar kWh"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "1ad16430dde7d5ca42d1",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_energia_red_hora"
+              }
+            },
+            "Property": "Solar kWh"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

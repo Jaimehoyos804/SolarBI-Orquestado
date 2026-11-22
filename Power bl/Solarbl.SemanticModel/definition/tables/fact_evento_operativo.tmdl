@@ -1,0 +1,79 @@
+table fact_evento_operativo
+	lineageTag: 250e39ec-604e-4d4e-8149-fc5fbccfcdb9
+
+	measure 'Horas sin red' = ```
+			
+			      CALCULATE(SUM(fact_evento_operativo[duracion_horas]), fact_evento_operativo[context_type] = "grid_unavailable_or_islanded")
+			```
+		lineageTag: e5174144-49a9-43bc-a27d-0b9793a0f175
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column evento_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7f272c3f-4f24-4bcb-a591-9933770a88ca
+		summarizeBy: sum
+		sourceColumn: evento_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column inverter_key
+		dataType: int64
+		formatString: 0
+		lineageTag: a749a406-8ee0-4ee5-997a-5b96b9502762
+		summarizeBy: none
+		sourceColumn: inverter_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_key
+		dataType: int64
+		formatString: 0
+		lineageTag: d4109259-f966-49ee-a96c-35e4391adff8
+		summarizeBy: none
+		sourceColumn: fecha_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column hora_key
+		dataType: int64
+		formatString: 0
+		lineageTag: 1899c919-e2a2-40dc-9329-4d788482e3ea
+		summarizeBy: none
+		sourceColumn: hora_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column context_type
+		dataType: string
+		lineageTag: ebd54eb0-38fb-49e9-a60e-4f8e7ff79133
+		summarizeBy: none
+		sourceColumn: context_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column duracion_horas
+		dataType: double
+		lineageTag: 71fce058-4ef1-407f-bbc7-a86c97a94168
+		summarizeBy: sum
+		sourceColumn: duracion_horas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_evento_operativo = m
+		mode: import
+		source =
+				let
+				    Origen = PostgreSQL.Database("localhost:30434", "solarbl"),
+				    gold_fact_evento_operativo = Origen{[Schema="gold",Item="fact_evento_operativo"]}[Data],
+				    #"Columnas quitadas" = Table.RemoveColumns(gold_fact_evento_operativo,{"inicio", "fin"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

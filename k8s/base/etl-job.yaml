@@ -1,0 +1,43 @@
+# Carga histórica: Job (corre hasta terminar y conserva su registro como evidencia)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: etl
+  labels: {app: etl}
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels: {app: etl}
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: esperar-postgres
+          image: postgres:16.6
+          command: ["sh", "-c", "until pg_isready -h postgres -p 5432; do echo esperando a postgres; sleep 3; done"]
+          resources:
+            requests: {cpu: 10m, memory: 16Mi}
+            limits: {cpu: 100m, memory: 64Mi}
+      containers:
+        - name: etl
+          image: solarbi-etl:1.0
+          imagePullPolicy: IfNotPresent   # la imagen local ya existe en el Docker de Docker Desktop
+          envFrom:
+            - configMapRef: {name: solarbi-config}
+          env:
+            - name: DB_USER
+              valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_USER}}
+            - name: DB_NAME
+              valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_NAME}}
+            - name: DB_PASSWORD
+              valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_PASSWORD}}
+          resources:
+            requests: {cpu: 250m, memory: 256Mi}
+            limits: {cpu: "1", memory: 1Gi}
+          volumeMounts:
+            - {name: bronze, mountPath: /app/data/bronze, readOnly: true}
+      volumes:
+        - name: bronze
+          hostPath:
+            path: __BRONZE_HOSTPATH__      # lo reemplaza scripts/k8s-up.ps1
+            type: Directory

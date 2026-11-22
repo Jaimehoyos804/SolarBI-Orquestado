@@ -1,0 +1,47 @@
+relationship 78aeb02f-09f6-460b-9361-7ed6784e2fcc
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_fecha.fecha
+	toColumn: LocalDateTable_a037bc08-47f0-47ef-988d-be53648c63b9.Date
+
+relationship 6a589937-a419-4e09-8e3f-a5f2d778cd00
+	fromColumn: fact_energia_red_hora.fecha_key
+	toColumn: dim_fecha.fecha_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 81b267bd-545f-4b7a-9629-3bc7f75f8c31
+	fromColumn: fact_energia_red_hora.hora_key
+	toColumn: dim_hora.hora_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 9d2fe20c-375c-445c-baa7-601c40c5d58e
+	fromColumn: fact_energia_red_hora.inverter_key
+	toColumn: dim_inversor.inverter_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 7aaad3cb-2abe-4e40-b7fc-de9205989775
+	fromColumn: fact_energia_red_hora.variable_key
+	toColumn: dim_variable.variable_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship 41aed4db-f5a5-4a8a-a3bb-46305d3aa0a1
+	fromColumn: fact_evento_operativo.fecha_key
+	toColumn: dim_fecha.fecha_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship bb90d4d1-ddc2-401b-b5f3-e0f459a9e4ea
+	fromColumn: fact_evento_operativo.hora_key
+	toColumn: dim_hora.hora_key
+
+	annotation PBI_IsFromSource = FS
+
+relationship c2705c38-f8cf-4901-afca-89b8bf86a32a
+	fromColumn: fact_evento_operativo.inverter_key
+	toColumn: dim_inversor.inverter_key
+
+	annotation PBI_IsFromSource = FS
+

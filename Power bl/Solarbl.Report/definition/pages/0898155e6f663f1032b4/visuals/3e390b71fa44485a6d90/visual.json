@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "3e390b71fa44485a6d90",
+  "position": {
+    "x": 1436,
+    "y": 0,
+    "z": 3000,
+    "height": 280,
+    "width": 280,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Balance componentes"
+                    }
+                  },
+                  "Property": "Costo red (escenario)"
+                }
+              },
+              "queryRef": "Balance componentes.Costo red (escenario)",
+              "nativeQueryRef": "Costo red (escenario)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Balance componentes"
+                  }
+                },
+                "Property": "Costo red (escenario)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "6c2e03be9c6cc41cf969",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Balance componentes"
+              }
+            },
+            "Property": "Costo red (escenario)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+table Tarifa
+	lineageTag: 6b4305b5-7d5b-4408-aede-632dfa3bc646
+
+	measure 'Valor de Tarifa' = SELECTEDVALUE('Tarifa'[Tarifa], 8)
+		lineageTag: f27e755b-b85e-4971-9b0a-91fd20799410
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Tarifa
+		lineageTag: dec47955-bf06-4b94-bffb-273c531770c6
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Tarifa = calculated
+		mode: import
+		source = GENERATESERIES(0.3, 2, 0.1)
+
+	annotation PBI_Id = e486d5ace39a4285a24fff0e75d5f42b
+

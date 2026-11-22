@@ -1,0 +1,38 @@
+# Datos nuevos periódicos: CronJob (una pasada de 55 s cada minuto)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: simulador
+  labels: {app: simulador}
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: Forbid          # nunca dos pasadas a la vez
+  startingDeadlineSeconds: 30
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      activeDeadlineSeconds: 90      # si algo se cuelga, se corta antes de la siguiente
+      template:
+        metadata:
+          labels: {app: simulador}
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: simulador
+              image: solarbi-etl:1.0
+              imagePullPolicy: IfNotPresent
+              command: ["python", "-m", "src.simulation.stream_simulator"]
+              envFrom:
+                - configMapRef: {name: solarbi-config}
+              env:
+                - name: DB_USER
+                  valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_USER}}
+                - name: DB_NAME
+                  valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_NAME}}
+                - name: DB_PASSWORD
+                  valueFrom: {secretKeyRef: {name: solarbi-secrets, key: DB_PASSWORD}}
+              resources:
+                requests: {cpu: 50m, memory: 64Mi}
+                limits: {cpu: 250m, memory: 256Mi}

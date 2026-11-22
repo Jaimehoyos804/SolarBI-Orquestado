@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Solarbl"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "661f6688-ecb6-4e94-b994-86e62b9fc3ac"
+  }
+}

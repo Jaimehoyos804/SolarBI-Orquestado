@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Solarbl"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d7492e83-bad8-4789-97cb-5b3569ab7eb6"
+  }
+}

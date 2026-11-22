@@ -1,0 +1,174 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "10dcde648475c05672f1",
+  "position": {
+    "x": 852,
+    "y": 328,
+    "z": 5001,
+    "height": 658,
+    "width": 796,
+    "tabOrder": 5001
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_fecha"
+                    }
+                  },
+                  "Property": "mes"
+                }
+              },
+              "queryRef": "dim_fecha.mes",
+              "nativeQueryRef": "mes",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_fecha"
+                    }
+                  },
+                  "Property": "nombre_mes"
+                }
+              },
+              "queryRef": "dim_fecha.nombre_mes",
+              "nativeQueryRef": "nombre_mes",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Red kWh"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Red kWh",
+              "nativeQueryRef": "Red kWh"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Red kWh mes anterior"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Red kWh mes anterior",
+              "nativeQueryRef": "Red kWh mes anterior"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Var % red vs mes anterior"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Var % red vs mes anterior",
+              "nativeQueryRef": "Var % red vs mes anterior"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a01a92bd014020c3f2b0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_energia_red_hora"
+              }
+            },
+            "Property": "Red kWh"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "6f9e95115ee2699dcfbe",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_fecha"
+              }
+            },
+            "Property": "nombre_mes"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "d0c0e969e6992e62d2df",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_fecha"
+              }
+            },
+            "Property": "mes"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "aef46f34ae8ca0024946",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_energia_red_hora"
+              }
+            },
+            "Property": "Red kWh mes anterior"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "bdd6802aebaff363ddd0",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_energia_red_hora"
+              }
+            },
+            "Property": "Var % red vs mes anterior"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - postgres.yaml
+  - grafana.yaml
+  - etl-job.yaml
+  - simulador-cronjob.yaml
+
+configMapGenerator:
+  # Parámetros NO sensibles, inyectados como variables de entorno
+  - name: solarbi-config
+    literals:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - SIM_INTERVALO_S=5
+      - SIM_DURACION_S=55
+  # Scripts SQL: única fuente de verdad (la misma carpeta que usa docker compose)
+  - name: postgres-init
+    files:
+      - ../../database/ddl/01_schema.sql
+      - ../../database/ddl/02_eventos.sql
+      - ../../database/ddl/03_kpis.sql
+      - ../../database/ddl/04_vivo.sql
+  # Provisioning de Grafana: fuente de datos, tableros y alertas
+  - name: grafana-datasources
+    files:
+      - ../../grafana/provisioning/datasources/postgres.yml
+  - name: grafana-dashboards
+    files:
+      - ../../grafana/provisioning/dashboards/provider.yml
+      - ../../grafana/provisioning/dashboards/solarbi_linea4.json
+      - ../../grafana/provisioning/dashboards/solarbi_vivo.json
+  - name: grafana-alerting
+    files:
+      - ../../grafana/provisioning/alerting/alerts.yml

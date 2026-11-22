@@ -1,0 +1,29 @@
+model Model
+	culture: es-CO
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+annotation PBI_QueryOrder = ["fact_energia_red_hora","fact_evento_operativo","dim_fecha","dim_hora","dim_inversor","dim_variable"]
+
+ref table fact_energia_red_hora
+ref table fact_evento_operativo
+ref table dim_fecha
+ref table DateTableTemplate_87dcfeb2-825c-424e-a3c4-e5902ab23ba2
+ref table LocalDateTable_a037bc08-47f0-47ef-988d-be53648c63b9
+ref table dim_hora
+ref table dim_inversor
+ref table dim_variable
+ref table 'Balance componentes'
+ref table Medidas
+ref table Tarifa
+
+ref cultureInfo es-CO
+
