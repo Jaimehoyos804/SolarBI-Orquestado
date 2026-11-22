@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "204a4ad45a5deb615d19",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 2000,
+    "height": 562,
+    "width": 890,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_hora"
+                    }
+                  },
+                  "Property": "franja"
+                }
+              },
+              "queryRef": "dim_hora.franja",
+              "nativeQueryRef": "franja",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dim_hora"
+                        }
+                      },
+                      "Property": "hora_key"
+                    }
+                  },
+                  "Function": 5
+                }
+              },
+              "queryRef": "CountNonNull(dim_hora.hora_key)",
+              "nativeQueryRef": "Recuento de hora_key"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "Red kWh"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.Red kWh",
+              "nativeQueryRef": "Red kWh"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "% red"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.% red",
+              "nativeQueryRef": "% red"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

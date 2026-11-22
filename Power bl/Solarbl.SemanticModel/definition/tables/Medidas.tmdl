@@ -1,9 +1,7 @@
 table Medidas
-	isHidden
 	lineageTag: 1bfcc1d7-ae76-4bc7-88a6-68e8793dcd1d
 
 	column Value
-		isHidden
 		formatString: 0
 		lineageTag: 1f0be9f2-f09b-4f7c-a7fc-db6ae3f85dee
 		summarizeBy: sum

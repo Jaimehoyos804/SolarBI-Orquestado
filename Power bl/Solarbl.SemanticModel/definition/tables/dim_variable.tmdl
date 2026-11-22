@@ -7,6 +7,8 @@ table dim_variable
 		summarizeBy: none
 		sourceColumn: variable_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column descripcion
@@ -14,6 +16,8 @@ table dim_variable
 		lineageTag: d6e87460-e864-4839-bd7c-90154f759728
 		summarizeBy: none
 		sourceColumn: descripcion
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -23,6 +27,8 @@ table dim_variable
 		summarizeBy: none
 		sourceColumn: unidad_declarada
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column estado
@@ -31,6 +37,8 @@ table dim_variable
 		summarizeBy: none
 		sourceColumn: estado
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column notas
@@ -38,6 +46,8 @@ table dim_variable
 		lineageTag: c0647eb1-b586-4159-a174-1cfbf4244de9
 		summarizeBy: none
 		sourceColumn: notas
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

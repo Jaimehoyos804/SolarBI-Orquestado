@@ -1,0 +1,75 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "c544b82ab7da5d4676ba",
+  "position": {
+    "x": 16,
+    "y": 0,
+    "z": 0,
+    "height": 392,
+    "width": 748,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Balance componentes"
+                    }
+                  },
+                  "Property": "Componente"
+                }
+              },
+              "queryRef": "Balance componentes.Componente",
+              "nativeQueryRef": "Componente",
+              "active": true
+            }
+          ]
+        },
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Balance componentes"
+                    }
+                  },
+                  "Property": "Tipo"
+                }
+              },
+              "queryRef": "Balance componentes.Tipo",
+              "nativeQueryRef": "Tipo"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Balance componentes"
+                    }
+                  },
+                  "Property": "Balance kWh"
+                }
+              },
+              "queryRef": "Balance componentes.Balance kWh",
+              "nativeQueryRef": "Balance kWh"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

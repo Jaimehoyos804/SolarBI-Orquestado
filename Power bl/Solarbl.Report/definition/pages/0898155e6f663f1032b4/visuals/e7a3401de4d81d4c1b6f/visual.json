@@ -52,23 +52,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "3b243e5dc460290605fb",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_energia_red_hora"
-              }
-            },
-            "Property": "Red kWh"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

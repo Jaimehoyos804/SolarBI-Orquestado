@@ -53,23 +53,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "f8a6557fb080e06b8036",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_energia_red_hora"
-              }
-            },
-            "Property": "% red"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

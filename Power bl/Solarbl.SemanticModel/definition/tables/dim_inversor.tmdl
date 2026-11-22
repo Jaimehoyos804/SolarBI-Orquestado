@@ -8,6 +8,8 @@ table dim_inversor
 		summarizeBy: none
 		sourceColumn: inverter_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column nombre
@@ -15,6 +17,8 @@ table dim_inversor
 		lineageTag: 1f9089f5-0b8a-4cf7-b556-5946c522765c
 		summarizeBy: none
 		sourceColumn: nombre
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

@@ -1,5 +1,4 @@
 table 'Balance componentes'
-	isHidden
 	lineageTag: d16680fe-8408-4914-b7f4-69e74bfe077e
 
 	measure 'Balance kWh' =
@@ -11,7 +10,6 @@ table 'Balance componentes'
 			    "Carga atendida", [Carga kWh],
 			    "Batería (carga)", [Batería carga kWh],
 			    "No explicado", [No explicado kWh])
-		isHidden
 		lineageTag: d155b5a0-779e-4f39-9f13-1a242e4bd698
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -22,7 +20,6 @@ table 'Balance componentes'
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Componente
-		isHidden
 		lineageTag: c6cfa17c-06e9-4be2-b314-d0f860081f5c
 		summarizeBy: none
 		isNameInferred
@@ -32,7 +29,6 @@ table 'Balance componentes'
 		annotation SummarizationSetBy = Automatic
 
 	column Orden
-		isHidden
 		formatString: 0
 		lineageTag: 989ceaa4-9577-4bad-8a96-f76e7fa4b41e
 		summarizeBy: sum
@@ -42,7 +38,6 @@ table 'Balance componentes'
 		annotation SummarizationSetBy = Automatic
 
 	column Tipo
-		isHidden
 		lineageTag: f2b0227a-badc-4a2f-b14c-42fc2e738058
 		summarizeBy: none
 		isNameInferred

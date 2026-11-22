@@ -8,6 +8,8 @@ table dim_hora
 		summarizeBy: none
 		sourceColumn: hora_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column franja
@@ -15,6 +17,8 @@ table dim_hora
 		lineageTag: bbd7cfd6-00ef-47e7-a7f5-d7c78ce517a4
 		summarizeBy: none
 		sourceColumn: franja
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -24,6 +28,8 @@ table dim_hora
 		lineageTag: 7bd17bb2-20d2-405f-bb30-54d6dd803fa6
 		summarizeBy: none
 		sourceColumn: es_hora_solar
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -35,6 +41,8 @@ table dim_hora
 				    gold_dim_hora = Origen{[Schema="gold",Item="dim_hora"]}[Data]
 				in
 				    gold_dim_hora
+
+	changedProperty = IsHidden
 
 	annotation PBI_NavigationStepName = Navegación
 

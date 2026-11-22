@@ -52,23 +52,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "280434d3ebbc74763cc7",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_evento_operativo"
-              }
-            },
-            "Property": "Horas sin red"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

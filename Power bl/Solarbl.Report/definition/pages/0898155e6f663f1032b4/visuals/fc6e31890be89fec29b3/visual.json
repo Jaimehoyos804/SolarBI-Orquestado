@@ -52,23 +52,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "1ad16430dde7d5ca42d1",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "fact_energia_red_hora"
-              }
-            },
-            "Property": "Solar kWh"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

@@ -52,23 +52,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "6c2e03be9c6cc41cf969",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "Balance componentes"
-              }
-            },
-            "Property": "Costo red (escenario)"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

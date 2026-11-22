@@ -8,6 +8,8 @@ table dim_fecha
 		summarizeBy: none
 		sourceColumn: fecha_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column fecha
@@ -22,6 +24,8 @@ table dim_fecha
 			relationship: 78aeb02f-09f6-460b-9361-7ed6784e2fcc
 			defaultHierarchy: LocalDateTable_a037bc08-47f0-47ef-988d-be53648c63b9.'Jerarquía de fechas'
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation UnderlyingDateTimeDataType = Date
@@ -33,6 +37,8 @@ table dim_fecha
 		summarizeBy: sum
 		sourceColumn: anio
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column trimestre
@@ -41,6 +47,8 @@ table dim_fecha
 		lineageTag: 58a0ca1d-1561-4c48-89b2-e8261d50a4fb
 		summarizeBy: sum
 		sourceColumn: trimestre
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -51,6 +59,8 @@ table dim_fecha
 		summarizeBy: sum
 		sourceColumn: mes
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column nombre_mes
@@ -58,6 +68,8 @@ table dim_fecha
 		lineageTag: 5be1fe9f-6d78-48e0-b9e1-6d50f9eac161
 		summarizeBy: none
 		sourceColumn: nombre_mes
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -68,6 +80,8 @@ table dim_fecha
 		summarizeBy: sum
 		sourceColumn: dia
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column dia_semana
@@ -77,6 +91,8 @@ table dim_fecha
 		summarizeBy: sum
 		sourceColumn: dia_semana
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column nombre_dia
@@ -84,6 +100,8 @@ table dim_fecha
 		lineageTag: 922e2b34-5315-4635-aec0-6618e8b67a9e
 		summarizeBy: none
 		sourceColumn: nombre_dia
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -93,6 +111,8 @@ table dim_fecha
 		lineageTag: f6137ede-a6cf-413e-b4f2-c08aac0fd30b
 		summarizeBy: none
 		sourceColumn: es_fin_de_semana
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

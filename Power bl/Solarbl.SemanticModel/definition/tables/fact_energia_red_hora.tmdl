@@ -7,6 +7,8 @@ table fact_energia_red_hora
 			```
 		lineageTag: 5691ad5a-6c4d-402b-b93e-535cece6d56d
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Red kWh' = ```
@@ -14,6 +16,8 @@ table fact_energia_red_hora
 			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "linepowerw_a") / 1000
 			```
 		lineageTag: bda4523c-b5ad-4be6-b367-5f812e119889
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -23,6 +27,8 @@ table fact_energia_red_hora
 			```
 		lineageTag: 199f44a1-dcd3-493a-9e3f-c3f71135dd09
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Batería descarga kWh' = ```
@@ -30,6 +36,8 @@ table fact_energia_red_hora
 			      CALCULATE(SUM(fact_energia_red_hora[positive_power_unit_hours]), dim_variable[variable_key] = "battpower_calc") / 1000
 			```
 		lineageTag: 2281d215-8feb-4d9d-a274-03a4e09b2ac4
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -39,30 +47,42 @@ table fact_energia_red_hora
 			```
 		lineageTag: ae42e098-edbe-4ec9-9e0e-6bf1cf7e5d77
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Entradas kWh' = [Solar kWh] + [Red kWh] + [Batería descarga kWh]
 		lineageTag: 9cd7a855-9540-4924-ac3d-8c940f92b6e4
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Salidas kWh' = [Carga kWh] + [Batería carga kWh]
 		lineageTag: a6bf4f3c-5649-4724-ab58-cf9454646eb7
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'No explicado kWh' = [Entradas kWh] - [Salidas kWh]
 		lineageTag: ff9ba3e6-f117-4494-bf66-af2982bbb41f
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'No explicado %' = DIVIDE([No explicado kWh], [Entradas kWh])
 		lineageTag: f515264a-b49e-448b-a187-57b0b89b6926
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure '% red' = DIVIDE([Red kWh], [Entradas kWh])
 		lineageTag: 8d547dd1-f653-4085-bfdb-ac7c8fa5be33
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -75,6 +95,8 @@ table fact_energia_red_hora
 			)
 		lineageTag: 4d814193-2097-4bea-9629-a1e821f661ff
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Var % red vs mes anterior' = ```
@@ -83,6 +105,8 @@ table fact_energia_red_hora
 			```
 		lineageTag: 331c08f8-ab7a-482a-a7e6-8d76909564b0
 
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Disponibilidad del registro %' = ```
@@ -90,6 +114,8 @@ table fact_energia_red_hora
 			      CALCULATE(AVERAGE(fact_energia_red_hora[cobertura_pct]), dim_variable[variable_key] = "linepowerw_a")
 			```
 		lineageTag: 2d68e51f-40a5-48d4-a084-4231cfd2c5ea
+
+		changedProperty = IsHidden
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -100,6 +126,8 @@ table fact_energia_red_hora
 		summarizeBy: none
 		sourceColumn: inverter_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column variable_key
@@ -107,6 +135,8 @@ table fact_energia_red_hora
 		lineageTag: 76bace3c-3905-46b5-8736-87e4f0df652b
 		summarizeBy: none
 		sourceColumn: variable_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -117,6 +147,8 @@ table fact_energia_red_hora
 		summarizeBy: none
 		sourceColumn: fecha_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column hora_key
@@ -126,6 +158,8 @@ table fact_energia_red_hora
 		summarizeBy: none
 		sourceColumn: hora_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column positive_power_unit_hours
@@ -133,6 +167,8 @@ table fact_energia_red_hora
 		lineageTag: a4754f64-e7c8-4811-998e-55c8228e3dee
 		summarizeBy: sum
 		sourceColumn: positive_power_unit_hours
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -144,6 +180,8 @@ table fact_energia_red_hora
 		summarizeBy: sum
 		sourceColumn: negative_power_unit_hours
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -153,6 +191,8 @@ table fact_energia_red_hora
 		lineageTag: 7373f3cf-c48a-4699-8827-6ab8057062e7
 		summarizeBy: sum
 		sourceColumn: net_power_unit_hours
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -164,6 +204,8 @@ table fact_energia_red_hora
 		summarizeBy: sum
 		sourceColumn: coverage_minutes
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -173,6 +215,8 @@ table fact_energia_red_hora
 		lineageTag: 213f0caf-150a-4edd-bd3d-4a12d0017465
 		summarizeBy: sum
 		sourceColumn: cobertura_pct
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

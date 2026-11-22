@@ -7,6 +7,17 @@ table fact_evento_operativo
 			```
 		lineageTag: e5174144-49a9-43bc-a27d-0b9793a0f175
 
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Red kWh por día con datos' =
+			
+			DIVIDE([Red kWh], DISTINCTCOUNT('fact_energia_red_hora'[fecha_key]))
+		lineageTag: 1de4ba89-f88c-47d1-8f14-f1e5cbb410cc
+
+		changedProperty = IsHidden
+
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column evento_id
@@ -15,6 +26,8 @@ table fact_evento_operativo
 		lineageTag: 7f272c3f-4f24-4bcb-a591-9933770a88ca
 		summarizeBy: sum
 		sourceColumn: evento_id
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -25,6 +38,8 @@ table fact_evento_operativo
 		summarizeBy: none
 		sourceColumn: inverter_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column fecha_key
@@ -33,6 +48,8 @@ table fact_evento_operativo
 		lineageTag: d4109259-f966-49ee-a96c-35e4391adff8
 		summarizeBy: none
 		sourceColumn: fecha_key
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 
@@ -43,6 +60,8 @@ table fact_evento_operativo
 		summarizeBy: none
 		sourceColumn: hora_key
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column context_type
@@ -51,6 +70,8 @@ table fact_evento_operativo
 		summarizeBy: none
 		sourceColumn: context_type
 
+		changedProperty = IsHidden
+
 		annotation SummarizationSetBy = Automatic
 
 	column duracion_horas
@@ -58,6 +79,8 @@ table fact_evento_operativo
 		lineageTag: 71fce058-4ef1-407f-bbc7-a86c97a94168
 		summarizeBy: sum
 		sourceColumn: duracion_horas
+
+		changedProperty = IsHidden
 
 		annotation SummarizationSetBy = Automatic
 

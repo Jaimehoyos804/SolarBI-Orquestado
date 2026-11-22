@@ -1,0 +1,57 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "7b20118b518602b9e9f4",
+  "position": {
+    "x": 1386,
+    "y": 158,
+    "z": 2000,
+    "height": 352,
+    "width": 534,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_energia_red_hora"
+                    }
+                  },
+                  "Property": "No explicado %"
+                }
+              },
+              "queryRef": "fact_energia_red_hora.No explicado %",
+              "nativeQueryRef": "No explicado %",
+              "format": "0.00 %;-0.00 %;0.00 %"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_energia_red_hora"
+                  }
+                },
+                "Property": "No explicado %"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}
