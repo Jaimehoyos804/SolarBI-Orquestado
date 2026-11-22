@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 import psycopg
 from dotenv import load_dotenv
-
+from src.transformation.variables import CATALOGO
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CSV_PATH = PROJECT_ROOT / "data" / "temp" / "perfil_energia_red_horaria.csv"
 TOL = 1e-4
@@ -23,6 +23,15 @@ ON CONFLICT (inverter, variable, hour_local) DO UPDATE SET
   coverage_minutes          = EXCLUDED.coverage_minutes,
   contributing_segments     = EXCLUDED.contributing_segments
 """
+
+UPSERT_DIM = """
+INSERT INTO gold.dim_variable (variable_key, descripcion, unidad_declarada, estado, notas)
+VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT (variable_key) DO UPDATE SET
+  descripcion = EXCLUDED.descripcion, unidad_declarada = EXCLUDED.unidad_declarada,
+  estado = EXCLUDED.estado, notas = EXCLUDED.notas
+"""
+
 
 UPSERT_GOLD = """
 INSERT INTO gold.fact_energia_red_hora
@@ -79,6 +88,9 @@ def main():
     ok = True
     with connect() as conn:
         with conn.cursor() as cur:
+            cur.executemany(UPSERT_DIM, [
+            (k, v["descripcion"], v["unidad"], v["estado"], v["notas"])
+            for k, v in CATALOGO.items()])
             cur.executemany(UPSERT_SILVER, rows)
             cur.execute(UPSERT_GOLD)
 

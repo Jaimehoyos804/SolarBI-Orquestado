@@ -5,10 +5,10 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from src.extraction.sqlite_reader import get_connection
-
+from src.transformation.variables import CATALOGO
 LOCAL_TZ = ZoneInfo("Asia/Shanghai")     
 MAX_GAP_SECONDS = 300
-VARIABLES = ("gridpowerw_a", "linepowerw_a") 
+VARIABLES = tuple(CATALOGO) 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PROJECT_ROOT / "data" / "temp"
@@ -62,9 +62,10 @@ def main():
                 summaries[(inverter, v)] = {"rows": 0, "valid": 0, "null": 0, "integrated": 0,
                                             "long_gaps": 0, "invalid_intervals": 0,
                                             "max_gap": 0.0, "covered_seconds": 0.0}
+            columnas = ", ".join(f"({CATALOGO[v]['expr']}) AS {v}" for v in VARIABLES)
             cur = conn.cursor()
             cur.execute(
-                f"SELECT read_ts, {', '.join(VARIABLES)} FROM analog_measurements "
+                f"SELECT read_ts, {columnas} FROM analog_measurements "
                 "WHERE inverter = ? ORDER BY read_ts", (inverter,))
             previous = {v: None for v in VARIABLES}
             while True:
