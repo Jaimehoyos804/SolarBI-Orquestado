@@ -14,11 +14,10 @@ table fact_evento_operativo
 	measure 'Red kWh por día con datos' =
 			
 			DIVIDE([Red kWh], DISTINCTCOUNT('fact_energia_red_hora'[fecha_key]))
+		formatString: 0.00
 		lineageTag: 1de4ba89-f88c-47d1-8f14-f1e5cbb410cc
 
 		changedProperty = IsHidden
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column evento_id
 		dataType: int64

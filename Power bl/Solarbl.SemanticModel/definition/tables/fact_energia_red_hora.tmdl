@@ -80,11 +80,10 @@ table fact_energia_red_hora
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure '% red' = DIVIDE([Red kWh], [Entradas kWh])
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		lineageTag: 8d547dd1-f653-4085-bfdb-ac7c8fa5be33
 
 		changedProperty = IsHidden
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Red kWh mes anterior' =
 			
@@ -103,11 +102,10 @@ table fact_energia_red_hora
 			
 			      DIVIDE([Red kWh] - [Red kWh mes anterior], [Red kWh mes anterior])
 			```
+		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		lineageTag: 331c08f8-ab7a-482a-a7e6-8d76909564b0
 
 		changedProperty = IsHidden
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Disponibilidad del registro %' = ```
 			

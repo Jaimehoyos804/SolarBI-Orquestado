@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "7b20118b518602b9e9f4",
   "position": {
-    "x": 1386,
-    "y": 158,
+    "x": 430.69930619190995,
+    "y": 101.34101322162587,
     "z": 2000,
-    "height": 352,
-    "width": 534,
+    "height": 284.11676921062968,
+    "width": 430.69930619190995,
     "tabOrder": 2000
   },
   "visual": {
@@ -51,6 +51,49 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "value": [
+        {
+          "properties": {
+            "horizontalAlignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Bold'', wf_segoe-ui_bold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#D97706'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_energia_red_hora.No explicado %"
+          }
+        }
+      ]
     },
     "drillFilterOtherVisuals": true
   }

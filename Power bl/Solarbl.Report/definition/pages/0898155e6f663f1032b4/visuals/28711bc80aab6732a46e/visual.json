@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "28711bc80aab6732a46e",
   "position": {
-    "x": 0,
-    "y": 328,
+    "x": 668.36811100929435,
+    "y": 283.51354889383424,
     "z": 5000,
-    "height": 658,
-    "width": 798,
+    "height": 418.63489985600205,
+    "width": 609.252519963346,
     "tabOrder": 5000
   },
   "visual": {
@@ -91,7 +91,7 @@
               },
               "queryRef": "dim_fecha.fecha.Variation.Jerarquía de fechas.Día",
               "nativeQueryRef": "fecha Día",
-              "active": true
+              "active": false
             }
           ]
         },
@@ -114,6 +114,67 @@
           ]
         }
       }
+    },
+    "objects": {
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1D4ED8'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "enableTitleDataLabel": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Evolución de Energía Importada de Red (kWh)'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "drillFilterOtherVisuals": true
   }
